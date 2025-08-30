@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>Basic Quick Mastering 모듈</title>
+    <meta name="description" content="화낙 로봇 Basic Quick Mastering 절차 안내 모듈 (16단계, 이미지+설명)">
+    <meta name="keywords" content="FANUC, Quick Mastering, Basic, RTA, 로봇 마스터링, 단계별 가이드">
+    <meta name="author" content="RTA Basic Module">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body { font-family: sans-serif; text-align: center; margin: 20px; }
+        img { max-width: 600px; border: 1px solid #ccc; margin-bottom: 20px; }
+        .nav { margin-top: 20px; }
+        button { padding: 10px 20px; margin: 5px; border: none; border-radius: 5px;
+                 background: #007bff; color: white; cursor: pointer; }
+        button:disabled { background: #aaa; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <h1 id="title">Basic Quick Mastering - Step 1</h1>
+    <!-- 초기 이미지 -->
+    <img id="stepImage" src="{{ url_for('static', filename='Basic_QuickMast_1.png') }}" alt="Quick Mastering Step">
+    <p id="description"></p>
+
+    <div class="nav">
+        <button id="prevBtn" onclick="prevStep()">이전</button>
+        <button id="nextBtn" onclick="nextStep()">다음</button>
+    </div>
+
+    <script>
+        // 16단계 설명
+        const descriptions = [
+            "System Variables 수정/입력 - [Menu] → ‘---NEXT---’ 선택",
+            "‘SYSTEM’ → ‘TYPE’ → ‘Variables’ 선택",
+            "‘MASTER_ENB’ 찾기 후 값 확인 및 설정",
+            "‘MASTER_ENB’ 선택 후 ‘1’ 입력",
+            "‘DMR_GRP’ 선택 → [ENTER]",
+            "다시 [ENTER] 입력",
+            "Robot Data sheet의 ‘Master_Count’ 값 확인",
+            "‘REF_COUNT’ 선택 후 [ENTER]",
+            "Data Sheet 값 입력 후 [PREV] 눌러 돌아가기",
+            "‘REF_DONE’을 ‘FALSE’ → ‘TRUE’ 변경",
+            "[MENU] → ‘SYSTEM’ → ‘Master/Cal’ 진입",
+            "‘Pulse mismatch’ 알람 발생 시 ‘RES_PCA’ 선택",
+            "모든 축을 15도 이상 회전 후, 0도로 맞춤",
+            "0도 맞춘 후 ‘Quick Master’ 선택 → 완료",
+            "‘Calibrate’ 선택 → [YES]",
+            "Calibrate 완료 후 정상 동작 확인 → ‘DONE’ 선택"
+        ];
+
+        let step = 1;
+
+        function updatePage() {
+            document.getElementById("title").innerText = "Basic Quick Mastering - Step " + step;
+            // Flask static 경로로 이미지 변경
+            document.getElementById("stepImage").src = "{{ url_for('static', filename='') }}" + "Basic_QuickMast_" + step + ".png";
+            document.getElementById("description").innerText = descriptions[step-1];
+
+            document.getElementById("prevBtn").disabled = (step === 1);
+            document.getElementById("nextBtn").disabled = (step === 16);
+
+            document.title = "Basic Quick Mastering - Step " + step;
+            document.querySelector("meta[name='description']")
+                .setAttribute("content", "Quick Mastering 절차 Step " + step + ": " + descriptions[step-1]);
+        }
+
+        function prevStep() {
+            if (step > 1) step--;
+            updatePage();
+        }
+
+        function nextStep() {
+            if (step < 16) step++;
+            updatePage();
+        }
+
+        updatePage();
+    </script>
+</body>
+</html>
